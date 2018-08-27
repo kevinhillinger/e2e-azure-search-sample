@@ -36,13 +36,19 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
 ```
 This script will create the Python virtual environment and install the python requirements necessary to kick off the process that will deploy the Azure resources and perform configuration.
 
-### 3. Update settings.yaml
-You will need to update the ```settings.yaml``` with your settings. Update it with the target subscription information and the service principal info.
+### 3. Update config.yaml
+You will need to update the ```config/config.yaml``` with your settings. Update it with the target subscription information and the service principal info.
 
     NOTE: If you don't know or haven't create a service principal yet for Azure, you will find [the instructions here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
 
 
 # Explanation
+
+## Resource Management Templates
+
+If you look in ```templates```, you will notice that all the resources for the sample are grouped into one template, and then API Management is separate.
+
+> Note: It often becomes an issue with deployments that one resource may take longer than another to deploy, leading to frustratingly deployment operation. If this is the case, split the deployment up into multiple, isolating those resources that don't require a hard dependency on anything else.
 
 ## Azure Search
 
