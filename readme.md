@@ -42,7 +42,21 @@ You will need to update the ```settings.yaml``` with your settings. Update it wi
     NOTE: If you don't know or haven't create a service principal yet for Azure, you will find [the instructions here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
 
 
-## Query
+# Explanation
+
+## Azure Search
+
+
+### Data Source Setup
+
+
+#### Cosmos DB Graph Connection String
+Since Azure Search does NOT support the Graph API, you will not be able to use the portal options directly when setting up a data source. Instead, you will need to input the connection string. When getting the connection string from Cosmos DB, you must be sure to remove the ```ApiKind=Gremlin``` parameter from the string. Otherwise, it will not be accepted by Azure Search.
+
+
+### Example Query
+
+For the queries below, not that since the Graph data structure is written and read slightly different than a usual document in Cosmos DB, it's necessary to JOIN on each property (which in the Graph API has a value and an id), and then select the value as a named field.
 
 ```
 SELECT 
@@ -76,3 +90,19 @@ JOIN c2 in c.city
 WHERE c.label = 'address' AND c._ts >= @HighWaterMark 
 ORDER BY c._ts
 ```
+
+## Updating Search Document (index updates)
+
+### Azure Functions example
+
+For this sample, Azure Functions is being used to take advantage of the Cosmos DB trigger. Right now, the example is using v1 of Azure Functions.
+
+#### Dependencies
+
+The dependencies you'll need are located in the ```project.json``` file. Be sure to note the extra dependencies as those may be required.
+
+### Resources
+
+* [Updating documents](https://docs.microsoft.com/en-us/rest/api/searchservice/AddUpdate-or-Delete-Documents)
+* [Search getting started code samples](https://github.com/Azure-Samples/search-dotnet-getting-started/blob/master/DotNetHowTo/DotNetHowTo/Program.cs)
+* [search import data using c#](https://docs.microsoft.com/en-us/azure/search/search-import-data-dotnet)
