@@ -1,0 +1,33 @@
+<policies>
+	<inbound>
+		<base />
+		<set-header name="api-key" exists-action="override">
+			<value>{Azure Search API Key}</value>
+		</set-header>
+		<set-header name="Accept" exists-action="override">
+			<value>application/json</value>
+		</set-header>
+		<set-query-parameter name="api-version" exists-action="override">
+			<value>2017-11-11</value>
+		</set-query-parameter>
+		<set-backend-service base-url="https://{search_account}.search.windows.net/indexes/person/docs" />
+		<rewrite-uri template="/" />
+	</inbound>
+	<backend>
+		<base />
+	</backend>
+	<outbound>
+		<base />
+		<set-body>@{
+            var response = context.Response.Body.As<JObject>();
+            foreach (var key in new [] {"@odata.context"}) {
+            response.Property(key).Remove();
+            }
+            return response.ToString();
+        }
+        </set-body>
+	</outbound>
+	<on-error>
+		<base />
+	</on-error>
+</policies>

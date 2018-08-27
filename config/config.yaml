@@ -1,0 +1,27 @@
+account:
+  tenantId: <aad tenant id>
+  subscriptionId: <azure subscription id>
+  client: 
+    id: <aad app id / service principal id>
+    secret: <aad app / sp secret>
+resourceGroup:
+  name: search-demo
+  
+  # location will be used for all resources, including the resource group
+  # you can change the location to suite your needs
+  location: eastus2
+resources:
+  cosmosdb:
+    name: searchdemo
+    database:
+      name: graphdb
+      graph: 
+        name: persons
+        partitionKey: /partitionKey
+  apiManagement:
+      name: searchdemo
+      admin:
+        name: <your name>
+        email: <your email address>
+  functionApp:
+      name: searchdemofn

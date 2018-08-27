@@ -1,0 +1,41 @@
+<policies>
+    <inbound>
+        <base />
+        <set-header name="api-key" exists-action="override">
+            <value>{Azure Search Query Key}</value>
+        </set-header>
+        <set-header name="Accept" exists-action="override">
+            <value>application/json</value>
+        </set-header>
+        <set-query-parameter name="api-version" exists-action="override">
+            <value>2017-11-11</value>
+        </set-query-parameter>
+        <set-query-parameter name="$filter" exists-action="override">
+            <!-- Example of taking in a filter -->
+            <value>@{ 
+                var accountId = context.Request.Url.Query.GetValueOrDefault("accountId", ""); 
+                var accountFilter = "accountId eq " + accountId;
+                var filter = context.Request.Url.Query.GetValueOrDefault("$filter", "");
+
+                if (string.IsNullOrEmpty(filter)) {
+                    return accountFilter;
+                }
+                return filter + " and " + accountFilter;
+            }
+            </value>
+        </set-query-parameter>
+        <set-query-parameter name="accountId" exists-action="delete" />
+				
+        <set-backend-service base-url="https://{search_account}.search.windows.net/indexes/address/docs" />
+        <rewrite-uri template="/" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

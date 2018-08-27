@@ -1,0 +1,7 @@
+gremlinpython==3.3.3
+futures
+azure-mgmt-resource==2.0.0
+azure-mgmt-cosmosdb>=0.4.1
+pydocumentdb>=1.0.0
+python-dotenv
+PyYAML
